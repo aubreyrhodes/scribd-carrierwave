@@ -11,7 +11,7 @@ module ScribdCarrierWave
     end
     
     def upload uploader
-      args = { file: uploader.url, access: 'private' }
+      args = { file: uploader.current_path, access: 'private' }
       scribd_user.upload(args)
     end
     

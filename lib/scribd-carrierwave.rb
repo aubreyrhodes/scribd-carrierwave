@@ -2,6 +2,7 @@ require File.join(File.dirname(__FILE__), './scribd-carrierwave/version')
 require File.join(File.dirname(__FILE__), './scribd-carrierwave/config')
 require 'carrierwave'
 require 'rscribd'
+require 'configatron'
 
 module ScribdCarrierWave
   class << self

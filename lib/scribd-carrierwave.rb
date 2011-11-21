@@ -11,13 +11,21 @@ module ScribdCarrierWave
     end
     
     def upload uploader
-      args = { file: uploader.url, access: 'private' }
+      args = { file: full_path(uploader), access: 'private' }
       scribd_user.upload(args)
     end
     
     def destroy uploader
       document = scribd_user.find_document(uploader.ipaper_id) rescue nil
       document.destroy if !document.nil?
+    end
+    
+    def full_path uploader
+      if uploader.url =~ /http(s?):\/\//
+        uploader.url
+      else
+        uploader.root + uploader.url
+      end
     end
     
     module ClassMethods

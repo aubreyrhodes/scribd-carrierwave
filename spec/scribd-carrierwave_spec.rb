@@ -11,7 +11,8 @@ describe ScribdCarrierWave do
     describe "upload" do
       it "calls rscribd.upload with the correct arguments" do
         @uploader.stubs(:url).returns('test_url')
-        @scribd_user_mock.expects(:upload).with(has_entries(file: 'test_url', access: 'private'))
+        @uploader.stubs(:root).returns('/root/path/')
+        @scribd_user_mock.expects(:upload).with(has_entries(file: '/root/path/test_url', access: 'private'))
         ScribdCarrierWave::upload @uploader
       end
     end
@@ -23,6 +24,20 @@ describe ScribdCarrierWave do
         document.expects(:destroy)
         @scribd_user_mock.expects(:find_document).with('test_id').returns document
         ScribdCarrierWave::destroy @uploader
+      end
+    end
+    
+    describe "full_path" do
+      it "returns the full file path for file storage" do
+        @uploader.stubs(:url).returns('/test/path.pdf')
+        @uploader.stubs(:root).returns('/full/path')
+        ScribdCarrierWave::full_path(@uploader).should eq '/full/path/test/path.pdf'
+      end
+      
+      it "returns the url for fog storage" do
+        @uploader.stubs(:url).returns('http://www.test.com/file.pdf')
+        @uploader.stubs(:root).returns('/full/path')
+        ScribdCarrierWave::full_path(@uploader).should eq 'http://www.test.com/file.pdf'
       end
     end
   end

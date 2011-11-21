@@ -1,0 +1,92 @@
+require File.join(File.dirname(__FILE__), %w[spec_helper])
+
+describe ScribdCarrierWave do
+  context "module methods" do
+    before(:each) do
+      @uploader = mock   
+      @scribd_user_mock = mock
+      Scribd::User.stubs(:login).returns(@scribd_user_mock)
+    end
+    
+    describe "upload" do
+      it "calls rscribd.upload with the correct arguments" do
+        @uploader.stubs(:url).returns('test_url')
+        @scribd_user_mock.expects(:upload).with(has_entries(file: 'test_url', access: 'private'))
+        ScribdCarrierWave::upload @uploader
+      end
+    end
+    
+    describe "destroy" do
+      it "gets the correct document to destroy and calls destroy" do
+        @uploader.stubs(:ipaper_id).returns('test_id')
+        document = mock
+        document.expects(:destroy)
+        @scribd_user_mock.expects(:find_document).with('test_id').returns document
+        ScribdCarrierWave::destroy @uploader
+      end
+    end
+  end
+  
+  context "instance methods" do
+    before(:each) do
+      @uploader = CarrierWave::Uploader::Base.new
+      @uploader.class_eval{has_ipaper}
+      @model = mock
+      @uploader.stubs(:model).returns(@model)
+      @mounted_as = :test_model
+      @uploader.stubs(:mounted_as).returns(@mounted_as)
+    end
+    
+    describe "upload_to_scribd" do
+      it "calls upload" do
+        res = mock
+        res.stubs(:doc_id).returns("test_id")
+        res.stubs(:access_key).returns("test_access_key")
+        @model.expects(:update_attributes).with(has_entries('test_model_ipaper_id' => 'test_id', 
+                                                            'test_model_ipaper_access_key' => 'test_access_key'))
+                                          .returns true
+        ScribdCarrierWave.expects(:upload).with(@uploader).returns(res)
+        @uploader.upload_to_scribd nil
+      end
+    end
+
+    describe "delete_from_scribd" do
+      it "calls destroy" do
+        ScribdCarrierWave.expects(:destroy).with(@uploader)
+        @uploader.delete_from_scribd
+      end
+    end
+
+    describe "display_ipaper" do
+      before(:each) do
+        @uploader.stubs(:ipaper_id).returns('test_id')
+        @uploader.stubs(:ipaper_access_key).returns('test_access_key')
+      end
+
+      it "returns an html string with the ipaper_id and ipaper_access_key included" do      
+        html = @uploader.display_ipaper
+        html.should match /test_id/
+        html.should match /test_access_key/
+      end
+
+      it "sets the correct html id attributes" do
+        html = @uploader.display_ipaper({id: 'test_id'})
+        html.should match /id="embedded_flashtest_id"/
+      end
+    end
+
+    describe "ipaper_id" do
+      it "should return the value of the model's attribute" do
+        @model.expects(:test_model_ipaper_id)
+        @uploader.ipaper_id
+      end
+    end
+
+    describe "ipaper_access_key" do
+      it "should return the value of the model's attribute" do
+        @model.expects(:test_model_ipaper_access_key)
+        @uploader.ipaper_access_key
+      end
+    end
+  end  
+end

@@ -10,7 +10,7 @@ describe ScribdCarrierWave do
     
     describe "upload" do
       it "calls rscribd.upload with the correct arguments" do
-        @uploader.stubs(:current_path).returns('test_url')
+        @uploader.stubs(:url).returns('test_url')
         @scribd_user_mock.expects(:upload).with(has_entries(file: 'test_url', access: 'private'))
         ScribdCarrierWave::upload @uploader
       end

@@ -21,7 +21,7 @@ module ScribdCarrierWave
     end
     
     def full_path uploader
-      if uploader.url =~ /http(s?):\/\//
+      if uploader.url =~ /^http(s?):\/\//
         uploader.url
       else
         uploader.root + uploader.url

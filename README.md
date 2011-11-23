@@ -3,6 +3,8 @@ Scribd-CarrierWave
 
 Integrates [CarrierWave](https://github.com/jnicklas/carrierwave) with [Scribd](http://scribd.com/). This plugin was heavily influenced by [Scribd_fu](https://github.com/ProtectedMethod/scribd_fu).
 
+[![Build Status](https://secure.travis-ci.org/aubreyrhodes/scribd-carrierwave.png)](http://travis-ci.org/aubreyrhodes/scribd-carrierwave.png)
+
 Install
 -------
 

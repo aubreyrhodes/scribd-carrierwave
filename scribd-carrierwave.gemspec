@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rspec"
   s.add_development_dependency "mocha"
   s.add_development_dependency "cover_me"
+  s.add_development_dependency "rake"
   s.add_runtime_dependency "rscribd"
   s.add_runtime_dependency "carrierwave"
   s.add_runtime_dependency "configatron"

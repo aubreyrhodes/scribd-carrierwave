@@ -53,7 +53,7 @@ module ScribdCarrierWave
       def display_ipaper(options = {})        
         id = options.delete(:id)
         <<-END
-          <script type="text/javascript" src="http://www.scribd.com/javascripts/view.js"></script>
+          <script type="text/javascript" src="http://www.scribd.com/javascripts/scribd_api.js"></script>
           <div id="embedded_flash#{id}">#{options.delete(:alt)}</div>
           <script type="text/javascript">
             var scribd_doc = scribd.Document.getDoc(#{ipaper_id}, '#{ipaper_access_key}');

@@ -89,6 +89,17 @@ describe ScribdCarrierWave do
         html.should match /id="embedded_flashtest_id"/
       end
     end
+    
+    describe "fullscreen_url" do
+      before(:each) do
+        @uploader.stubs(:ipaper_id).returns('test_id')
+        @uploader.stubs(:ipaper_access_key).returns('test_access_key')
+      end
+      
+      it "returns the correct url" do
+        @uploader.fullscreen_url.should match /http:\/\/www.scribd.com\/fullscreen\/test_id\?access_key=test_access_key/
+      end
+    end
 
     describe "ipaper_id" do
       it "should return the value of the model's attribute" do

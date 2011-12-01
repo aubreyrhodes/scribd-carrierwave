@@ -63,6 +63,10 @@ module ScribdCarrierWave
           </script>
         END
       end
+      
+      def fullscreen_url
+        "http://www.scribd.com/fullscreen/#{ipaper_id}?access_key=#{ipaper_access_key}"
+      end
 
       def ipaper_id
         self.model.send("#{self.mounted_as.to_s}_ipaper_id")

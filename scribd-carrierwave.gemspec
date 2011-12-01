@@ -4,7 +4,7 @@ require "scribd-carrierwave/version"
 
 Gem::Specification.new do |s|
   s.name        = "scribd-carrierwave"
-  s.version     = ScribdCarrierwave::VERSION
+  s.version     = ScribdCarrierWave::VERSION
   s.authors     = ["Aubrey Rhodes"]
   s.email       = ["aubrey.c.rhodes@gmail.com"]
   s.homepage    = ""

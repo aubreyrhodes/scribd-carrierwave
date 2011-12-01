@@ -1,3 +1,3 @@
-module ScribdCarrierwave
-  VERSION = "0.0.6"
+module ScribdCarrierWave
+  VERSION = "0.0.7"
 end

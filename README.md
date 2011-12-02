@@ -42,7 +42,7 @@ Just add ````<%= attachment.display_ipaper %>```` into your view.
 
 To display multiple documents on the same page, you need to pass in a unique id for each one:
 
-````<%= attachment.display_ipaper({id: '_attachemment1'}) %>````
+````<%= attachment.display_ipaper({id: '_attachement1'}) %>````
 
 To get the link to the fullscreen document:
 

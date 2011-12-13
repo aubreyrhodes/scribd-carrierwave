@@ -32,7 +32,7 @@ Configure
     ```ruby
     t.integer :attachment_ipaper_id
     t.string  :attachment_ipaper_access_key
-    ````
+    ```
     
 Scribd-CarrierWave will now automatically upload new attachments to Scribd as a private document, and save the id and access_key on the model.
 
@@ -43,6 +43,10 @@ Just add ````<%= attachment.display_ipaper %>```` into your view.
 To display multiple documents on the same page, you need to pass in a unique id for each one:
 
 ````<%= attachment.display_ipaper({id: '_attachement1'}) %>````
+
+To pass in params to the Scribd javascript options (listed [here](http://www.scribd.com/developers/api?method_name=Javascript+API#parameters))
+
+````<%= attachment.display_ipaper({height: 700, width: 600}) %>````
 
 To get the link to the fullscreen document:
 

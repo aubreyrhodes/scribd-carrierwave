@@ -88,6 +88,26 @@ describe ScribdCarrierWave do
         html = @uploader.display_ipaper({id: 'test_id'})
         html.should match /id="embedded_flashtest_id"/
       end
+      
+      it "does not add the id as a param" do
+        html = @uploader.display_ipaper({id: 'test_id'})
+        html.should_not match /scribd_doc.addParam\('id', 'test_id'\)/
+      end
+      
+      it "adds string params correctly" do
+        html = @uploader.display_ipaper({test_param: 'test_value'})
+        html.should match /scribd_doc.addParam\('test_param', 'test_value'\)/
+      end
+      
+      it "adds boolean params correctly" do        
+        html = @uploader.display_ipaper({test_param: true})
+        html.should match /scribd_doc.addParam\('test_param', true\)/
+      end
+      
+      it "adds integer params correctly" do
+        html = @uploader.display_ipaper({test_param: 1})
+        html.should match /scribd_doc.addParam\('test_param', 1\)/
+      end
     end
     
     describe "fullscreen_url" do

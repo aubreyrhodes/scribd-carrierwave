@@ -44,7 +44,7 @@ To display multiple documents on the same page, you need to pass in a unique id 
 
 ````<%= attachment.display_ipaper({id: '_attachement1'}) %>````
 
-To pass in params to the Scribd javascript options (listed [here](http://www.scribd.com/developers/api?method_name=Javascript+API#parameters))
+To pass in params to the Scribd javascript options (listed [here](http://www.scribd.com/developers/javascript_api#parameters))
 
 ````<%= attachment.display_ipaper({height: 700, width: 600}) %>````
 

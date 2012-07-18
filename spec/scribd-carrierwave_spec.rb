@@ -15,6 +15,12 @@ describe ScribdCarrierWave do
         @scribd_user_mock.expects(:upload).with(has_entries(file: '/root/path/test_url', access: 'private'))
         ScribdCarrierWave::upload @uploader
       end
+
+      it "handles URLs with query parameters correctly" do
+        @uploader.stubs(:url).returns('http://example.com/file.pdf?AWSSTUFFBREAKS=TRUE')
+        @scribd_user_mock.expects(:upload).with(has_entries(type: 'pdf'))
+        ScribdCarrierWave::upload @uploader
+      end
     end
     
     describe "destroy" do

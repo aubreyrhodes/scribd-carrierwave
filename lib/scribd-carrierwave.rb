@@ -11,7 +11,15 @@ module ScribdCarrierWave
     end
     
     def upload uploader
-      args = { file: full_path(uploader), access: 'private' }
+      file_path = full_path(uploader)
+      args = { file: file_path, access: 'private' }
+
+      type = File.extname(file_path)
+      if type
+        type = type.gsub(/^\./, '').gsub(/\?.*$/, '')
+        args.merge!(type: type) if type != ''
+      end
+
       scribd_user.upload(args)
     end
     

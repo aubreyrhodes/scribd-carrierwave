@@ -1,17 +1,54 @@
 require File.join(File.dirname(__FILE__), %w[spec_helper])
 
+class MockUploader
+end
+
+class TestUploader
+  include ScribdCarrierWave
+
+  def self.after(*args); end
+  def self.before(*args); end
+end
+
 describe ScribdCarrierWave do
   context "module methods" do
     before(:each) do
-      @uploader = mock   
+      @uploader = mock
+      @uploader.stubs(:class).returns(MockUploader)
+      MockUploader.stubs(:public?).returns(false)
       @scribd_user_mock = mock
       Scribd::User.stubs(:login).returns(@scribd_user_mock)
+    end
+
+    describe "class methods" do
+      it "responds to public?" do
+        TestUploader.should respond_to :public?
+      end
+
+      it "defaults to private" do
+        TestUploader.public?.should be_false
+      end
+
+      it "responds to has_ipaper" do
+        TestUploader.should respond_to :has_ipaper
+      end
+
+      it "sets public correctly" do
+        TestUploader.class_eval do
+          has_ipaper true
+        end
+        TestUploader.public?.should be_true
+      end
+
     end
     
     describe "upload" do
       it "calls rscribd.upload with the correct arguments" do
         @uploader.stubs(:url).returns('test_url')
         @uploader.stubs(:root).returns('/root/path/')
+        uploader_class = mock
+        uploader_class.stubs(:public).returns(false)
+        @uploader.class.stubs(:class).returns(uploader_class)
         @scribd_user_mock.expects(:upload).with(has_entries(file: '/root/path/test_url', access: 'private'))
         ScribdCarrierWave::upload @uploader
       end
@@ -19,6 +56,20 @@ describe ScribdCarrierWave do
       it "handles URLs with query parameters correctly" do
         @uploader.stubs(:url).returns('http://example.com/file.pdf?AWSSTUFFBREAKS=TRUE')
         @scribd_user_mock.expects(:upload).with(has_entries(type: 'pdf'))
+        ScribdCarrierWave::upload @uploader
+      end
+
+      it "makes a private file if public? returns false" do
+        @uploader.stubs(:url).returns('http://whatever')
+        MockUploader.stubs(:public?).returns(false)
+        @scribd_user_mock.expects(:upload).with(has_entries(access: 'private'))
+        ScribdCarrierWave::upload @uploader
+      end
+
+      it "makes a public file if public? returns true" do
+        @uploader.stubs(:url).returns('http://whatever')
+        MockUploader.stubs(:public?).returns(true)
+        @scribd_user_mock.expects(:upload).with(has_entries(access: 'public'))
         ScribdCarrierWave::upload @uploader
       end
     end
@@ -45,6 +96,12 @@ describe ScribdCarrierWave do
         @uploader.stubs(:root).returns('/full/path')
         ScribdCarrierWave::full_path(@uploader).should eq 'http://www.test.com/file.pdf'
       end
+    end
+  end
+
+  context "class methods" do
+    it "responds to has_ipaper" do
+
     end
   end
   

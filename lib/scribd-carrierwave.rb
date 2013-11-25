@@ -11,8 +11,9 @@ module ScribdCarrierWave
     end
     
     def upload uploader
+
       file_path = full_path(uploader)
-      args = { file: file_path, access: 'private' }
+      args = { file: file_path, access: ( uploader.class.public? ? 'public' : 'private' )}
 
       type = File.extname(file_path)
       if type
@@ -37,10 +38,17 @@ module ScribdCarrierWave
     end
     
     module ClassMethods
-      def has_ipaper
+
+      def public?
+        @public
+      end
+
+      def has_ipaper(public = false)
         include InstanceMethods
         after :store, :upload_to_scribd
         before :remove, :delete_from_scribd
+
+        @public = !!public
       end
     end
     
